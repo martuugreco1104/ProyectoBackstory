@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificado - Reporte</title>
+    <style>
+        /* ==========================================================================
+           ENCAPSULAMIENTO DE ESTILOS (Aislamiento del Backend)
+           Todos los estilos están limitados a la clase padre .certificado-root
+           ========================================================================== */
+        
+        .certificado-root {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1a1a1a;
+            background-color: #ffffff;
+            /* Tamaño y márgenes centrados para vista web (simula la hoja A4) */
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 50px;
+            box-sizing: border-box;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Reset básico interno para evitar herencias no deseadas del CSS global del proyecto */
+        .certificado-root *,
+        .certificado-root *::before,
+        .certificado-root *::after {
+            box-sizing: inherit;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ==========================================================================
+           CABECERA (Logotipo y Título)
+           ========================================================================== */
+        
+        .certificado-root .cert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Alineación vertical */
+            margin-bottom: 60px;
+        }
+
+        .certificado-root .cert-logo-wrapper {
+            /* Control estricto de tamaño de imagen para evitar que logos gigantes rompan la maqueta */
+            max-width: 180px;
+            max-height: 70px;
+            display: flex;
+            align-items: center;
+        }
+
+        .certificado-root .cert-logo {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            object-position: left center;
+        }
+
+        .certificado-root .cert-main-title {
+            font-size: 30px;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-align: right;
+            line-height: 1.1;
+        }
+
+        /* ==========================================================================
+           ESTRUCTURA PRINCIPAL (Secciones con Flexbox - Flexibles y Dinámicas)
+           ========================================================================== */
+
+        .certificado-root .cert-section {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            margin-bottom: 5px; 
+            /* Evita cortes feos a mitad de sección al imprimir */
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* Título lateral izquierdo */
+        .certificado-root .cert-section-title {
+            width: 30%; /* Proporción fija para alinear todas las secciones */
+            flex-shrink: 0;
+            font-size: 20px;
+            font-weight: 400;
+            color: #333333;
+            padding-right: 20px;
+            line-height: 1.25;
+        }
+
+        /* Contenedor derecho para campos (Crece verticalmente de forma adaptativa) */
+        .certificado-root .cert-section-content {
+            width: 70%;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px; /* Espaciado uniforme y flexible entre campos */
+        }
+
+        /* Divisores horizontales */
+        .certificado-root .cert-divider {
+            border: none;
+            border-top: 1.5px solid #222222;
+            margin: 35px 0;
+            width: 100%;
+        }
+
+        /* ==========================================================================
+           CAMPOS DE DATOS (Contenedores, Etiquetas y Valores)
+           ========================================================================== */
+
+        /* Contenedor de un campo individual */
+        .certificado-root .cert-field-group {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid #bfbfbf;
+            padding-bottom: 6px;
+            /* Evita cortes dentro de un mismo campo al imprimir */
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* Etiqueta (Label) superior */
+        .certificado-root .cert-field-label {
+            font-size: 11px;
+            color: #555555;
+            text-transform: uppercase;
+            letter-spacing: 0.25em; /* Espaciado de letras amplio como en el diseño */
+            margin-bottom: 3px;
+            font-weight: 600;
+        }
+
+        /* Valor (Texto corto de 1 línea) */
+        .certificado-root .cert-field-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: #000000;
+            word-wrap: break-word;
+            line-height: 1.3;
+        }
+
+        /* Variante: Valor en bloque sin bordes inferiores y multilínea */
+        .certificado-root .cert-field-multiline {
+            font-size: 14.5px;
+            font-weight: 400;
+            color: #333333;
+            line-height: 1.6;
+            margin-top: 10px;
+            text-align: justify;
+            white-space: pre-wrap; /* Mantiene saltos de línea procedentes del backend */
+        }
+
+        /* ==========================================================================
+           OPTIMIZACIÓN PARA IMPRESIÓN (@media print)
+           ========================================================================== */
+        @media print {
+            /* Configurar página A4 portrait estricta */
+            @page {
+                size: A4 portrait;
+                margin: 15mm 15mm;
+            }
+
+            .certificado-root {
+                /* Se retira restricción de ancho para que ocupe todo el papel */
+                padding: 0;
+                max-width: 100%;
+                margin: 0;
+                background-color: #ffffff !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* Compactar márgenes para que entre más contenido por página */
+            .certificado-root .cert-header {
+                margin-bottom: 40px;
+            }
+            .certificado-root .cert-divider {
+                margin: 25px 0;
+                border-color: #000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            /* Asegurar saltos de página lógicos */
+            .certificado-root .cert-section,
+            .certificado-root .cert-field-group,
+            .certificado-root .cert-field-multiline {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            
+            /* Forzar grises oscuros y negros puros sobre papel para legibilidad */
+            .certificado-root .cert-field-label {
+                color: #333 !important;
+            }
+            .certificado-root .cert-field-value,
+            .certificado-root .cert-main-title {
+                color: #000 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="certificado-root">
+        <div class="cert-header">
+            <div class="cert-logo-wrapper">
+                <img src="{{ logo_url }}" alt="{{ nombre_empresa }}" class="cert-logo">
+            </div>
+            <h1 class="cert-main-title">Clear Watch Report</h1>
+        </div>
+
+        <div class="cert-section">
+            <div class="cert-section-title">
+                Search<br>info
+            </div>
+            <div class="cert-section-content">
+                <div class="cert-field-group">
+                    <span class="cert-field-label">USUARIO</span>
+                    <span class="cert-field-value">Lorem ipsum</span>
+                </div>
+                <div class="cert-field-group">
+                    <span class="cert-field-label">FECHA</span>
+                    <span class="cert-field-value">04/04/2026</span>
+                </div>
+                <div class="cert-field-group">
+                    <span class="cert-field-label">HORA</span>
+                    <span class="cert-field-value">00:00:00</span>
+                </div>
+            </div>
+        </div>
+
+        <hr class="cert-divider">
+
+        <div class="cert-section">
+            <div class="cert-section-title">
+                Search<br>Parameters
+            </div>
+            <div class="cert-section-content">
+                <div class="cert-field-group">
+                    <span class="cert-field-label">TIPO DE CONSULTA</span>
+                    <span class="cert-field-value">Lorem ipsum</span>
+                </div>
+                <div class="cert-field-group">
+                    <span class="cert-field-label">NOMBRE</span>
+                    <span class="cert-field-value">Lorem ipsum</span>
+                </div>
+                <div class="cert-field-group">
+                    <span class="cert-field-label">FECHA DE NACIMIENTO</span>
+                    <span class="cert-field-value">04/04/2026</span>
+                </div>
+                <div class="cert-field-group">
+                    <span class="cert-field-label">OTRO</span>
+                    <span class="cert-field-value">Lorem ipsum</span>
+                </div>
+            </div>
+        </div>
+
+        <hr class="cert-divider">
+
+        <div class="cert-section">
+            <div class="cert-section-title">
+                Search<br>Results
+            </div>
+            <div class="cert-section-content">
+                <div class="cert-field-group">
+                    <span class="cert-field-value">Result</span>
+                </div>
+                <div class="cert-field-group">
+                    <span class="cert-field-value">Result</span>
+                </div>
+                <div class="cert-field-group">
+                    <span class="cert-field-value">Result</span>
+                </div>
+                <div class="cert-field-group">
+                    <span class="cert-field-value">Result</span>
+                </div>
+
+                <div class="cert-field-group">
+                    <span class="cert-field-multiline">Lorem ipsum dolor sit amet consectetur adipiscing elit sapien magna, iaculis ultricies diam magnis fermentum convallis libero vulputate conubia sed, ante malesuada eget aenean nibh curae elementum non.</span>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
